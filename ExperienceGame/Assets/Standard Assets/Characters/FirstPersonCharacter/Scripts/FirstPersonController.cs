@@ -41,6 +41,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_StepCycle;
         private float m_NextStep;
         private bool m_Jumping;
+        private bool m_Crouching;
         private AudioSource m_AudioSource;
 
         // Use this for initialization
@@ -82,6 +83,23 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
+            
+
+     		if (Input.GetKey("c"))
+		{
+			if (m_CharacterController.isGrounded && m_IsWalking) {
+				m_Crouching = true;
+				m_CharacterController.height = 1.15f;
+				m_Camera.transform.position = new Vector3(m_Camera.transform.position.x, 1f, m_Camera.transform.position.z);
+			}
+		}
+		else if (Input.GetKeyUp("c"))
+		{
+			m_Crouching = false;
+			m_CharacterController.height = 1.8f;
+			m_Camera.transform.position = new Vector3(m_Camera.transform.position.x, 0.8f, m_Camera.transform.position.z);
+		}
+
         }
 
 
@@ -109,6 +127,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.x = desiredMove.x*speed;
             m_MoveDir.z = desiredMove.z*speed;
 
+
+	// Debug.Log(m_CharacterController.height);
 
             if (m_CharacterController.isGrounded)
             {
@@ -213,7 +233,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #if !MOBILE_INPUT
             // On standalone builds, walk/run speed is modified by a key press.
             // keep track of whether or not the character is walking or running
-            m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
+            m_IsWalking = !Input.GetKey(KeyCode.LeftShift) || m_Crouching;
 #endif
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;

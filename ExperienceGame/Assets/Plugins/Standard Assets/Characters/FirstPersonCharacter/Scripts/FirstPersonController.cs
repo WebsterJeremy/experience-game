@@ -85,21 +85,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
             // when the player presses "c"
-			if (Input.GetKey("c"))
-			{
-				m_Crouching = true;
-				// set the character to be short to simulate them crouching
-				m_CharacterController.height = 1.0f;
-				// lower the camera to make the crouch look more realistic
-				m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-		     }
-		     else
-		     {
-				m_Crouching = false;
-				// reset the character height and camera position values to their initial values
-				m_CharacterController.height = 1.8f;
-				m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
-			}
+            if (Input.GetKey("c"))
+            {
+                m_Crouching = true;
+                // set the character to be short to simulate them crouching
+                m_CharacterController.height = 1.0f;
+                // lower the camera to make the crouch look more realistic
+                m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+            }
+            else
+            {
+                m_Crouching = false;
+                // reset the character height and camera position values to their initial values
+                m_CharacterController.height = 1.8f;
+                m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
+            }
         }
 
 

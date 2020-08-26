@@ -84,7 +84,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
             
-
+/*
      		if (Input.GetKey("c"))
 		{
 			if (m_CharacterController.isGrounded && m_IsWalking) {
@@ -99,7 +99,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_CharacterController.height = 1.8f;
 			m_Camera.transform.position = new Vector3(m_Camera.transform.position.x, 0.8f, m_Camera.transform.position.z);
 		}
+*/
 
+			if (Input.GetKey("c"))
+			{
+				m_Crouching = true;
+				m_CharacterController.height = 1.0f;
+				m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+		     }
+		     else
+		     {
+				m_Crouching = false;
+				m_CharacterController.height = 1.8f;
+				m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
+			}
         }
 
 

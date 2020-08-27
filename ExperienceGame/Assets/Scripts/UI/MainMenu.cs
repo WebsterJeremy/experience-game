@@ -22,4 +22,11 @@ public class MainMenu : MonoBehaviour
 
         //        SpawnPlayer();
     }
+
+    // Exit the Game
+    // Doesn't work in the Unity Editor Game window,
+    // only when you build and run the game.
+    public void Quit() {
+        Application.Quit();
+    }
 }

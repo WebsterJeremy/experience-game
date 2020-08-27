@@ -84,6 +84,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
+
             // when the player presses "c"
             if (Input.GetKey("c"))
             {

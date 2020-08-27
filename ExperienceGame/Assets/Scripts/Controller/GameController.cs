@@ -20,8 +20,6 @@ public class GameController : MonoBehaviour
     #region PrivateVariables
 
 
-    private int money = 0;
-
     private Texture2D screenshot;
 
     private Dictionary<string, string> stats = new Dictionary<string, string>();
@@ -30,9 +28,7 @@ public class GameController : MonoBehaviour
     #endregion
     #region Initlization
 
-    /**
-     * Creates an Perament(static) instance of this class, so on scene change data isn't lost
-     */
+
     private static GameController instance;
     public static GameController Instance // Assign Singlton
     {
@@ -57,7 +53,7 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForFixedUpdate();
 
-        money = GetStat("MONEY", 0);
+//        money = GetStat("MONEY", 0);
 
         EffectController.TweenFadeScene(1f, 0f, 2f, () => {}); // Fade in from White on start.
 
@@ -66,11 +62,6 @@ public class GameController : MonoBehaviour
 //        SpawnPlayer();
     }
 
-    /**
-     * Save's all the players stat's such as Money, when they exit the application (Mobile Version)
-     * -- Todo --
-     * - Instead of just saving to PlayerPrefs, also save to SQLite (Database)
-     */
     private void OnApplicationQuit()
     {
         foreach (string key in stats.Keys)
@@ -83,22 +74,7 @@ public class GameController : MonoBehaviour
     #endregion
     #region Getters & Setters
 
-    public int GetMoney()
-    {
-        return money;
-    }
-
-    public void SetMoney(int amount)
-    {
-        MenuController.Instance.ChangeMoney(this.money, amount, 5f); // Update's the money UI element
-        this.money = amount;
-        SetStat("MONEY", this.money.ToString());
-    }
-
-    public GameObject GetPlayer()
-    {
-        return player;
-    }
+    public GameObject Player { get { return player; } }
 
     public string GetStat(string key, string _default)
     {

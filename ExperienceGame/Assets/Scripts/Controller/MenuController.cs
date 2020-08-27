@@ -55,7 +55,7 @@ public class MenuController : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
-        DisplayMoney(GameController.Instance.GetMoney());
+//        DisplayMoney(GameController.Instance.GetMoney());
     }
 
     #endregion
@@ -81,7 +81,7 @@ public class MenuController : MonoBehaviour
     #endregion
     #region Gameplay UI
 
-
+    /*
     public void ChangeMoney(int startValue, int endValue, float duration) { StartCoroutine(_ChangeMoney(startValue, endValue, duration)); }
     IEnumerator _ChangeMoney(int startValue, int endValue, float duration)
     {
@@ -103,6 +103,6 @@ public class MenuController : MonoBehaviour
         textMoney.text = money.ToString();
         rectMoney.sizeDelta = new Vector2(100 + (textMoney.text.Length * 40), rectMoney.sizeDelta.y);
     }
-
+    */
     #endregion
 }

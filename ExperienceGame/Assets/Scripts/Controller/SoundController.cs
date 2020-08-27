@@ -105,5 +105,15 @@ public class SoundController : MonoBehaviour
         }
     }
 
+    public static void PlaySound(Sound sound)
+    {
+        if (sound != null && !MUTED)
+        {
+            Instance.audioSource.volume = sound.volume;
+            Instance.audioSource.pitch = sound.pitch;
+            Instance.audioSource.PlayOneShot(sound.audioClip);
+        }
+    }
+
     #endregion
 }

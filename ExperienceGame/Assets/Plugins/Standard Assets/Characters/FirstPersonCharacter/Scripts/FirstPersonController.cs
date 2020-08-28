@@ -101,8 +101,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_CharacterController.height = 1.8f;
                 m_Camera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z);
             }
-        }
 
+            // when the player presses down the "escape" key
+            if (Input.GetKeyDown("escape")) {
+                // toggle between paused and playing
+                Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+            }
+        }
 
         private void PlayLandingSound()
         {

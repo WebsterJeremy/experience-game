@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 #pragma warning disable 649
 
@@ -60,6 +61,15 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
 //        SpawnPlayer();
+    }
+
+    public void Resume() {
+        // reset to the default time scale
+        Time.timeScale = 1;
+
+        // hide the play button
+        Button playButton = GameObject.Find("btn_play").GetComponent<Button>();
+        playButton.gameObject.SetActive(false);
     }
 
     private void OnApplicationQuit()

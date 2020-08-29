@@ -85,7 +85,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             else if(Input.GetMouseButtonUp(0))
             {
-                m_cursorIsLocked = true;
+                // don't lock the cursor on click if the game is paused
+                if (Time.timeScale != 0)
+                    m_cursorIsLocked = true;
             }
 
             if (m_cursorIsLocked)

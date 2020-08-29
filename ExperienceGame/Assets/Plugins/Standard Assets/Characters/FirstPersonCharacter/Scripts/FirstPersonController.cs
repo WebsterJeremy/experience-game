@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
@@ -44,6 +45,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Crouching;
         private AudioSource m_AudioSource;
 
+        public Button playButton;
+
         // Use this for initialization
         private void Start()
         {
@@ -57,6 +60,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+            // hide the play button until the player has paused
+            playButton = GameObject.Find("btn_play").GetComponent<Button>();
+            playButton.gameObject.SetActive(false);
         }
 
 
@@ -85,7 +92,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
 
-            // when the player presses "c"
+            // while the player presses the "c" key
             if (Input.GetKey("c"))
             {
                 m_Crouching = true;
@@ -104,8 +111,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             // when the player presses down the "escape" key
             if (Input.GetKeyDown("escape")) {
-                // toggle between paused and playing
-                Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+                // stop the in game time
+                Time.timeScale = 0;
+
+                // display the "PLAY" button
+                playButton.gameObject.SetActive(true);
             }
         }
 
@@ -132,9 +142,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             m_MoveDir.x = desiredMove.x*speed;
             m_MoveDir.z = desiredMove.z*speed;
-
-
-	// Debug.Log(m_CharacterController.height);
 
             if (m_CharacterController.isGrounded)
             {

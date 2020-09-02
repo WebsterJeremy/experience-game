@@ -63,15 +63,6 @@ public class GameController : MonoBehaviour
 //        SpawnPlayer();
     }
 
-    public void Resume() {
-        // reset to the default time scale
-        Time.timeScale = 1;
-
-        // hide the play button
-        Button playButton = GameObject.Find("btn_play").GetComponent<Button>();
-        playButton.gameObject.SetActive(false);
-    }
-
     private void OnApplicationQuit()
     {
         foreach (string key in stats.Keys)

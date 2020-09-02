@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 #pragma warning disable 618, 649
 namespace UnityStandardAssets.Characters.FirstPerson
@@ -59,11 +60,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_NextStep = m_StepCycle/2f;
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
-			m_MouseLook.Init(transform , m_Camera.transform);
+            m_MouseLook.Init(transform, m_Camera.transform);
 
-            // hide the play button until the player has paused
-            playButton = GameObject.Find("btn_play").GetComponent<Button>();
-            playButton.gameObject.SetActive(false);
+            // reset to deafault time
+            Time.timeScale = 1;
         }
 
 
@@ -110,12 +110,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             // when the player presses down the "escape" key
-            if (Input.GetKeyDown("escape")) {
+            if (Input.GetKeyDown("escape"))
+            {
+                // add the pause menu scene if we aren't already paused
+                // prevents adding multiple pause scenes at once
+                if (Time.timeScale != 0)
+                    SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+
                 // stop the in game time
                 Time.timeScale = 0;
-
-                // display the "PLAY" button
-                playButton.gameObject.SetActive(true);
             }
         }
 

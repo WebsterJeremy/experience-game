@@ -13,11 +13,15 @@ public class PauseMenu : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    // set the button text
+    // set the button text for switching between full screen and windowed
     string buttonText = Screen.fullScreen ? "SET WINDOWED" : "SET FULL SCREEN";
     GameObject.Find("btn_fullscreen").GetComponentInChildren<TMP_Text>().text = buttonText;
 
+    // the drop down for changing resolutions
     dropDown = GameObject.Find("dropdown_resolution").GetComponent<TMP_Dropdown>();
+    
+    // set the inital text of our dropdown
+    dropDown.GetComponentInChildren<TMP_Text>().text = "SET RESOLUTION";
   }
 
   // Update is called once per frame
@@ -33,13 +37,11 @@ public class PauseMenu : MonoBehaviour
 
     // unload the pause menu
     SceneManager.UnloadSceneAsync(2);
-
-    // SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(4));
   }
 
   public void ExitToMainMenu()
   {
-    // load main menuy scnee
+    // load main menu scnee
     SceneManager.LoadScene(0);
   }
 
@@ -51,7 +53,6 @@ public class PauseMenu : MonoBehaviour
   // 1 is the second drop down value, etc
   public void SetResolution(int index)
   {
-
     switch (index)
     {
       case 0:
@@ -69,12 +70,6 @@ public class PauseMenu : MonoBehaviour
     }
 
     // GetComponent<Dropdown>().options.Add(new Dropdown.OptionData() { text = "CHANGE RESOLUTION" });
-  }
-
-  public void RemoveDisplayOption()
-  {
-    // remove the "SET RESOLUTION" text option
-    dropDown.options.RemoveAll(c => c.text == "SET RESOLUTION");
   }
 
   // Toggle the game between full screen and windowed

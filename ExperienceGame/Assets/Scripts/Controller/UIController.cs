@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 
 #pragma warning disable 649
 
-public class MenuController : MonoBehaviour
+public class UIController : MonoBehaviour
 {
     #region AccessVariables
-
+    /*
     [Header("Mainmenu")]
     [SerializeField] private Button buttonPlay;
 
@@ -19,6 +19,9 @@ public class MenuController : MonoBehaviour
     [SerializeField] private RectTransform rectMoney;
 
     [SerializeField] private TextMeshProUGUI textMoney;
+    */
+    [Header("Menus")]
+    [SerializeField] private PauseMenu pauseMenu;
 
 
     #endregion
@@ -31,18 +34,18 @@ public class MenuController : MonoBehaviour
     #endregion
     #region Initlization
 
-    private static MenuController instance;
-    public static MenuController Instance // Assign Singlton
+    private static UIController instance;
+    public static UIController Instance // Assign Singlton
     {
         get
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<MenuController>();
+                instance = FindObjectOfType<UIController>();
                 if (Instance == null)
                 {
-                    var instanceContainer = new GameObject("MenuController");
-                    instance = instanceContainer.AddComponent<MenuController>();
+                    var instanceContainer = new GameObject("UIController");
+                    instance = instanceContainer.AddComponent<UIController>();
                 }
             }
             return instance;
@@ -55,15 +58,29 @@ public class MenuController : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
-//        DisplayMoney(GameController.Instance.GetMoney());
+        //        DisplayMoney(GameController.Instance.GetMoney());
     }
 
     #endregion
-    #region Core
+    #region Input
+
+
+    void Update()
+    {
+        if (Input.GetKeyDown("escape") && GameController.IsPlaying())
+        {
+            pauseMenu.Open();
+        }
+    }
+
+
+#endregion
+#region Core
 
 
     void AddButtonListeners()
     {
+        /*
         buttonPlay.onClick.AddListener(() =>
         {
 //            SoundController.PlaySound("button");
@@ -71,12 +88,14 @@ public class MenuController : MonoBehaviour
             buttonPlay.interactable = false;
             HideMainMenu();
         });
+        */
     }
 
     void HideMainMenu()
     {
         GameController.Instance.StartGame();
     }
+
 
     #endregion
     #region Gameplay UI

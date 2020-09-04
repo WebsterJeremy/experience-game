@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     #region AccessVariables
 
     public enum GameState { PAUSED, PLAYING };
-    public static GameState GAME_STATE = GameState.PAUSED;
+    public static GameState GAME_STATE = GameState.PLAYING;
 
     [Header("Player")]
     [SerializeField] private GameObject player;
@@ -92,6 +92,11 @@ public class GameController : MonoBehaviour
             stats.Add(key, stat);
 
         stats[key] = stat;
+    }
+
+    public static bool IsPlaying()
+    {
+        return GAME_STATE == GameState.PLAYING;
     }
 
     #endregion

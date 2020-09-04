@@ -7,14 +7,17 @@ using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private float fadeSpeed = 0.5f;
+    [SerializeField] private TMP_Dropdown dropDown;
+    [SerializeField] private RectTransform rectPauseMenu;
 
-  TMP_Dropdown dropDown;
 
-  // Start is called before the first frame update
-  void Start()
+    // Start is called before the first frame update
+    void Start()
   {
+
     // set the button text for switching between full screen and windowed
-    string buttonText = Screen.fullScreen ? "SET WINDOWED" : "SET FULL SCREEN";
+        string buttonText = Screen.fullScreen ? "SET WINDOWED" : "SET FULL SCREEN";
     GameObject.Find("btn_fullscreen").GetComponentInChildren<TMP_Text>().text = buttonText;
 
     // the drop down for changing resolutions
@@ -24,20 +27,24 @@ public class PauseMenu : MonoBehaviour
     dropDown.GetComponentInChildren<TMP_Text>().text = "SET RESOLUTION";
   }
 
-  // Update is called once per frame
-  void Update()
-  {
+    public void Open()
+    {
+        rectPauseMenu.gameObject.SetActive(true);
+        EffectController.TweenFade(rectPauseMenu.GetComponent<CanvasGroup>(), 0f, 1f, fadeSpeed, () => {});
 
-  }
+        GameController.GAME_STATE = GameController.GameState.PAUSED;
+        Time.timeScale = 0;
+    }
 
-  public void Resume()
-  {
-    // resume the game time
-    Time.timeScale = 1;
+    public void Resume()
+    {
+        EffectController.TweenFade(rectPauseMenu.GetComponent<CanvasGroup>(), 1f, 0f, fadeSpeed, () => {
+            rectPauseMenu.gameObject.SetActive(false);
+        });
 
-    // unload the pause menu
-    SceneManager.UnloadSceneAsync(2);
-  }
+        Time.timeScale = 1;
+        GameController.GAME_STATE = GameController.GameState.PLAYING;
+    }
 
   public void ExitToMainMenu()
   {

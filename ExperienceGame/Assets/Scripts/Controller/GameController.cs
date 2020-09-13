@@ -13,6 +13,8 @@ public class GameController : MonoBehaviour
 
     public enum GameState { PAUSED, PLAYING };
     public static GameState GAME_STATE = GameState.PLAYING;
+    public Player playerPublic; // used as a public gameobject for Ammo text display. Could merge with playerPrivate
+    public Text ammoText;
 
     [Header("Player")]
     [SerializeField] private GameObject player;
@@ -61,6 +63,10 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
 //        SpawnPlayer();
+    }
+
+    void Update(){
+        ammoText.text = "Ammo: " + playerPublic.Ammo;
     }
 
     private void OnApplicationQuit()

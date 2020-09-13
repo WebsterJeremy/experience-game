@@ -5,11 +5,16 @@ using UnityEngine;
 public class Player : Character
 {
     #region AccessVariables
+    public Camera playerCamera;
+    public GameObject bulletPrefab;
+    public int initialAmmo = 12;
+    public int Ammo { get {return ammo;}}
 
 
     #endregion
     #region PrivateVariables
-
+    private int ammo;
+    
 
     protected Area area;
 
@@ -21,8 +26,38 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
+        ammo = initialAmmo;
+        
     }
 
+    void Update(){
+        if(Input.GetMouseButtonDown(0)){
+       
+            Debug.Log("Fire");
+            //GameObject bulletObject = Instantiate (bulletPrefab);
+            //GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
+            //bulletObject.transform.position = playerCamera.transform.position + playerCamera.transform.forward;
+            //bulletObject.transform.forward = playerCamera.transform.forward;
+
+            if(ammo > 0){
+                ammo--;
+                GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
+                bulletObject.transform.position=playerCamera.transform.position + playerCamera.transform.forward;
+                bulletObject.transform.forward = playerCamera.transform.forward;
+
+            }
+        }
+    }
+
+    // Ammo Crate - Check for collisions
+    // void OnControllerColliderHit (ControllerColliderHit hit){
+    //     Debug.Log(hit.gameObject.name);
+    //     if(hit.collider.GetComponent<AmmoCrate> () !=null){
+    //         AmmoCrate ammoCrate = hit.gameObject.GetComponent<AmmoCrate> ();
+    //         ammo += ammoCrate.ammo;
+    //         Destroy (ammoCrate.gameObject);
+    //     }
+    // }
 
     #endregion
     #region Getters & Setters

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
-{
+public class Bullet : MonoBehaviour{
     public float speed = 8f;
-    public float lifeDuration = 2f;
+    public float lifeDuration = 2f; // bullet will be set to false after lifeDuration (2seconds)
 
     private float lifeTimer;
 

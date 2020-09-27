@@ -14,7 +14,10 @@ public class GameController : MonoBehaviour
     public enum GameState { PAUSED, PLAYING };
     public static GameState GAME_STATE = GameState.PLAYING;
     public Player playerPublic; // used as a public gameobject for Ammo text display. Could merge with playerPrivate
-    public Text ammoText;
+    public Enemy enemyPublic; // used as a public gameobject for Ememy Health text display.
+    public Text ammoText; // public element linked to UI Text cavas
+    public Text enemyHealth; // public element linked to UI Text cavas
+
 
     [Header("Player")]
     [SerializeField] private GameObject player;
@@ -22,15 +25,12 @@ public class GameController : MonoBehaviour
     #endregion
     #region PrivateVariables
 
-
     private Texture2D screenshot;
 
     private Dictionary<string, string> stats = new Dictionary<string, string>();
 
-
     #endregion
     #region Initlization
-
 
     private static GameController instance;
     public static GameController Instance // Assign Singlton
@@ -67,6 +67,7 @@ public class GameController : MonoBehaviour
 
     void Update(){
         ammoText.text = "Ammo: " + playerPublic.Ammo;
+        enemyHealth.text = "Enemy Player Damage: " + enemyPublic.EnemyHealth;
     }
 
     private void OnApplicationQuit()

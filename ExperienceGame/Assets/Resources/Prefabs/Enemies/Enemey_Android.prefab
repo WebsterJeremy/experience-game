@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 3127296601912268216}
   - component: {fileID: 5343536751275389488}
   - component: {fileID: 2909374165982336322}
+  - component: {fileID: -4793357854940574439}
   m_Layer: 0
   m_Name: Enemey_Android
   m_TagString: Untagged
@@ -101,6 +102,7 @@ MonoBehaviour:
   walkSounds: []
   damagedSounds: []
   deathSounds: []
+  initialEnemyHealth: 125
   moveSpeed: 30
   attackRange: 5
   playerRealizeRange: 10
@@ -167,6 +169,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &-4793357854940574439
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6446856597985410900}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6446856598314763764
 GameObject:
   m_ObjectHideFlags: 0

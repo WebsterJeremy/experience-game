@@ -9,19 +9,16 @@ public class Player : Character
     public GameObject bulletPrefab;
     public int initialAmmo = 12;
     public int Ammo { get {return ammo;}}
-
+    public ParticleSystem muzzelFlash;
 
     #endregion
     #region PrivateVariables
     private int ammo;
-    
 
     protected Area area;
 
-
     #endregion
     #region Initlization
-
 
     protected override void Start()
     {
@@ -32,14 +29,8 @@ public class Player : Character
 
     void Update(){
         if(Input.GetMouseButtonDown(0)){
-       
-            Debug.Log("Fire");
-            //GameObject bulletObject = Instantiate (bulletPrefab);
-            //GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
-            //bulletObject.transform.position = playerCamera.transform.position + playerCamera.transform.forward;
-            //bulletObject.transform.forward = playerCamera.transform.forward;
-
             if(ammo > 0){
+                muzzelFlash.Play();
                 ammo--;
                 GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
                 bulletObject.transform.position=playerCamera.transform.position + playerCamera.transform.forward;
@@ -49,15 +40,15 @@ public class Player : Character
         }
     }
 
-    // Ammo Crate - Check for collisions
-    // void OnControllerColliderHit (ControllerColliderHit hit){
-    //     Debug.Log(hit.gameObject.name);
-    //     if(hit.collider.GetComponent<AmmoCrate> () !=null){
-    //         AmmoCrate ammoCrate = hit.gameObject.GetComponent<AmmoCrate> ();
-    //         ammo += ammoCrate.ammo;
-    //         Destroy (ammoCrate.gameObject);
-    //     }
-    // }
+    // Check for collisions with AmmoCrate - Refill Ammo
+    void OnControllerColliderHit (ControllerColliderHit hit){
+        //Debug.Log(hit.gameObject.name);
+        if(hit.collider.GetComponent<AmmoCrate> () != null){
+            AmmoCrate ammoCrate = hit.gameObject.GetComponent<AmmoCrate> ();
+            ammo += ammoCrate.ammo;
+            Destroy (ammoCrate.gameObject);
+        }
+    }
 
     #endregion
     #region Getters & Setters
@@ -107,7 +98,6 @@ public class Player : Character
 
         dead = false;
     }
-
 
     #endregion
 }

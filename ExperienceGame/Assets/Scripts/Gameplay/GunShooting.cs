@@ -8,18 +8,16 @@ public class GunShooting : MonoBehaviour{
     Animator m_animator;
     public AudioClip m_fireSound;
     public AudioClip m_reloadSound;
-    
 
     // Start is called before the first frame update
     void Start(){
         m_animator = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
-
     }
 
     // Update is called once per frame
     void Update(){
-        if (Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButtonDown(0) && GameController.IsPlaying()){
             m_animator.SetTrigger("Shoot");
             //source.Play();
             PlayFireSound();
@@ -27,9 +25,8 @@ public class GunShooting : MonoBehaviour{
         
         if (Input.GetKey("r")){
             PlayReloadSound();
-            }
+        }
     }
-
 
     private void PlayFireSound(){
         source.clip = m_fireSound;

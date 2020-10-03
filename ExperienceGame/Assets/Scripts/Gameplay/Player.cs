@@ -23,20 +23,30 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
-        ammo = initialAmmo;
-        
+
+        // player stats setup
+        ammo  = initialAmmo;
+
+        // HUD setup
+        GameController.HUD.UpdateAmmo(ammo);
+        GameController.HUD.UpdateHealth((int) this.health);
     }
 
     void Update(){
-        if(Input.GetMouseButtonDown(0)){
-            if(ammo > 0){
-                muzzelFlash.Play();
-                ammo--;
-                GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
-                bulletObject.transform.position=playerCamera.transform.position + playerCamera.transform.forward;
-                bulletObject.transform.forward = playerCamera.transform.forward;
+        // only fire if the game is playing and the player has ammo
+        if (Input.GetMouseButtonDown(0) && GameController.IsPlaying() && ammo > 0)
+        {
+            Debug.Log("Firing!");
 
-            }
+            muzzelFlash.Play();
+            ammo--;
+
+            // update the ammo count on the HUD
+            GameController.HUD.UpdateAmmo(ammo);
+
+            GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
+            bulletObject.transform.position=playerCamera.transform.position + playerCamera.transform.forward;
+            bulletObject.transform.forward = playerCamera.transform.forward;
         }
     }
 
@@ -46,6 +56,10 @@ public class Player : Character
         if(hit.collider.GetComponent<AmmoCrate> () != null){
             AmmoCrate ammoCrate = hit.gameObject.GetComponent<AmmoCrate> ();
             ammo += ammoCrate.ammo;
+
+            // update the ammount count on the HUD
+            GameController.HUD.UpdateAmmo(ammo);
+
             Destroy (ammoCrate.gameObject);
         }
     }

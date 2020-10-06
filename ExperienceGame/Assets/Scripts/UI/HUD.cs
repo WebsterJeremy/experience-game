@@ -63,6 +63,6 @@ public class HUD : MonoBehaviour
         textAmmoRectTransform.anchoredPosition   = new Vector3(newTextX, newAmmoTextY,   0);
         textHealthRectTransform.anchoredPosition = new Vector3(newTextX, newHealthTextY, 0);
         textGunRectTransform.anchoredPosition    = new Vector3(newTextX, newGunthTextY,  0);
-        gunIconRectTransform.anchoredPosition    = new Vector3(newTextX + textGun.preferredWidth, newGunthTextY, 0);
+        gunIconRectTransform.anchoredPosition    = new Vector3(newTextX + textGun.preferredWidth - 10, newGunthTextY, 0);
     }
 }

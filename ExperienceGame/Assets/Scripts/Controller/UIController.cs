@@ -10,16 +10,10 @@ using UnityEngine.SceneManagement;
 public class UIController : MonoBehaviour
 {
     #region AccessVariables
-    /*
-    [Header("Mainmenu")]
-    [SerializeField] private Button buttonPlay;
 
     [Header("Gameplay UI")]
+    [SerializeField] private HUD hud;
 
-    [SerializeField] private RectTransform rectMoney;
-
-    [SerializeField] private TextMeshProUGUI textMoney;
-    */
     [Header("Menus")]
     [SerializeField] private PauseMenu pauseMenu;
 
@@ -54,12 +48,18 @@ public class UIController : MonoBehaviour
 
     IEnumerator Start()
     {
-        AddButtonListeners();
-
         yield return new WaitForSeconds(0.1f);
-
-        //        DisplayMoney(GameController.Instance.GetMoney());
     }
+
+    #endregion
+    #region Getters and Setters
+
+
+    public HUD GetHUD()
+    {
+        return hud;
+    }
+
 
     #endregion
     #region Input
@@ -74,24 +74,11 @@ public class UIController : MonoBehaviour
     }
 
 
-#endregion
-#region Core
+    #endregion
+    #region Core
 
 
-    void AddButtonListeners()
-    {
-        /*
-        buttonPlay.onClick.AddListener(() =>
-        {
-//            SoundController.PlaySound("button");
-
-            buttonPlay.interactable = false;
-            HideMainMenu();
-        });
-        */
-    }
-
-    void HideMainMenu()
+    public void HideMainMenu()
     {
         GameController.Instance.StartGame();
     }

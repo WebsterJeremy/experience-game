@@ -7,62 +7,108 @@ using TMPro;
 
 public class HUD : MonoBehaviour
 {
+    #region AccessVariables
 
-    // modify the text objects via the Update...() functions below
-    private TMP_Text textAmmo, textHealth, textGun;
-    private Image gunIcon;
 
-    // modify via SetHUDPosition
-    private RectTransform textAmmoRectTransform, textHealthRectTransform, textGunRectTransform, gunIconRectTransform;
+    [Header("HUD")]
+    [SerializeField] private TextMeshProUGUI textHealth;
+    [SerializeField] private TextMeshProUGUI textAmmo;
+    [SerializeField] private TextMeshProUGUI textWeaponName;
 
-    public HUD()
+    [SerializeField] private Image imgWeaponIcon;
+
+
+    #endregion
+    #region PrivateVariables
+
+
+    private RectTransform rectHealth;
+    private RectTransform rectAmmo;
+    private RectTransform rectWeaponName;
+
+    private int displayedHealth = 0;
+    private int displayedAmmo = 0;
+
+
+    #endregion
+    #region Initlization
+
+
+    IEnumerator Start()
     {
-        // text mesh pro objects
-        gunIcon    = GameObject.Find("img_gun_icon").GetComponentInChildren<Image>();
-        textGun    = GameObject.Find("text_gun").GetComponentInChildren<TMP_Text>();
-        textAmmo   = GameObject.Find("text_ammo").GetComponentInChildren<TMP_Text>();
-        textHealth = GameObject.Find("text_health").GetComponentInChildren<TMP_Text>();
+        yield return new WaitForSeconds(0.1f);
 
-        // the rect transform of the text mesh pro objects - used for positioning
-        gunIconRectTransform    = gunIcon.GetComponent<RectTransform>();
-        textGunRectTransform    = textGun.GetComponent<RectTransform>();
-        textAmmoRectTransform   = textAmmo.GetComponent<RectTransform>();
-        textHealthRectTransform = textHealth.GetComponent<RectTransform>();
+        DisplayHealth((int) Player.Instance.Health);
+        DisplayAmmo((int) Player.Instance.GetWeapon().GetAmmoCount());
     }
 
-    public void UpdateAmmo(int ammo)
-    {
-        textAmmo.text = $"AMMO   {ammo}";
+
+    #endregion
+    #region Getters & Setters
+
+    public void ChangeAmmo(int ammo) {
+        StartCoroutine(_SetAmmo(displayedAmmo, ammo, 0.2f));
     }
 
-    public void UpdateHealth(int health)
-    {
-        textHealth.text = $"HEALTH {health}%";
+    public void ChangeHealth(int health) {
+        StartCoroutine(_SetHealth(displayedHealth, health, 0.2f));
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    #endregion
+    #region Core
+
+
+    private void DisplayAmmo(int ammo)
+    {
+        textAmmo.text = "AMMO: "+ ammo.ToString() +" / "+ Player.Instance.GetWeapon().GetWeaponData().GetAmmoClip().ToString() +" ("+ Player.Instance.GetAmmo(Player.Instance.GetWeapon().GetWeaponData().GetAmmoType()).ToString() +")";
+//        rectAmmo.sizeDelta = new Vector2(100 + (textAmmo.text.Length * 40), rectAmmo.sizeDelta.y);
+        displayedAmmo = ammo;
     }
 
-    // update the position of the HUD elements
-    // should be run on setup, or when changing screen resolution
-    // pass in the screen width, and screen height
-    public void SetHUDPosition(int newWidth, int newHeight)
+    private void DisplayHealth(int health)
     {
-        // all HUD elements will have the same X position
-        float newTextX = -(newWidth / 2) + textAmmo.preferredWidth;
-
-        // calculate the new Y position for each element
-        float newHealthTextY = (newHeight / 2) - textAmmo.preferredHeight * 2;
-        float newAmmoTextY   = newHealthTextY  - textHealth.preferredHeight;
-        float newGunthTextY  = newAmmoTextY    - textGun.preferredHeight;
-
-        // set the new position of the elements
-        textAmmoRectTransform.anchoredPosition   = new Vector3(newTextX, newAmmoTextY,   0);
-        textHealthRectTransform.anchoredPosition = new Vector3(newTextX, newHealthTextY, 0);
-        textGunRectTransform.anchoredPosition    = new Vector3(newTextX, newGunthTextY,  0);
-        gunIconRectTransform.anchoredPosition    = new Vector3(newTextX + textGun.preferredWidth - 10, newGunthTextY, 0);
+        textHealth.text = "HEALTH: "+ health.ToString();
+//        rectHealth.sizeDelta = new Vector2(100 + (textHealth.text.Length * 40), rectHealth.sizeDelta.y);
+        displayedHealth = health;
     }
+
+
+    #endregion
+    #region Animation
+
+
+    
+    IEnumerator _SetAmmo(int startValue, int endValue, float duration)
+    {
+        float animTime = 0f;
+        float ammo = startValue;
+
+        while (animTime < duration)
+        {
+            ammo = Mathf.Lerp(ammo, endValue, animTime / duration);
+            DisplayAmmo((int)ammo);
+
+            yield return new WaitForEndOfFrame();
+            animTime += Time.deltaTime;
+        }
+    }
+
+    IEnumerator _SetHealth(int startValue, int endValue, float duration)
+    {
+        float animTime = 0f;
+        float health = startValue;
+
+        while (animTime < duration)
+        {
+            health = Mathf.Lerp(health, endValue, animTime / duration);
+            DisplayHealth((int)health);
+
+            yield return new WaitForEndOfFrame();
+            animTime += Time.deltaTime;
+        }
+    }
+
+
+    #endregion
 }

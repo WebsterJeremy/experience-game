@@ -5,69 +5,79 @@ using UnityEngine;
 public class Player : Character
 {
     #region AccessVariables
+
+
     public Camera playerCamera;
-    public GameObject bulletPrefab;
-    public int initialAmmo = 12;
-    public int Ammo { get {return ammo;}}
-    public ParticleSystem muzzelFlash;
+
 
     #endregion
     #region PrivateVariables
-    private int ammo;
+
 
     protected Area area;
 
+
     #endregion
     #region Initlization
+
+
+    private static Player instance;
+    public static Player Instance // Assign Singlton
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<Player>();
+                if (Instance == null)
+                {
+                    var instanceContainer = new GameObject("Player");
+                    instance = instanceContainer.AddComponent<Player>();
+                }
+            }
+            return instance;
+        }
+    }
 
     protected override void Start()
     {
         base.Start();
 
-        // player stats setup
-        ammo  = initialAmmo;
-
-        // HUD setup
-        GameController.HUD.UpdateAmmo(ammo);
-        GameController.HUD.UpdateHealth((int) this.health);
-    }
-
-    void Update(){
-        // only fire if the game is playing and the player has ammo
-        if (Input.GetMouseButtonDown(0) && GameController.IsPlaying() && ammo > 0)
+        if (GetWeapons().Count > 0)
         {
-            Debug.Log("Firing!");
-
-            muzzelFlash.Play();
-            ammo--;
-
-            // update the ammo count on the HUD
-            GameController.HUD.UpdateAmmo(ammo);
-
-            GameObject bulletObject = ObjectPoolingManager.Instance.GetBullet();
-            bulletObject.transform.position=playerCamera.transform.position + playerCamera.transform.forward;
-            bulletObject.transform.forward = playerCamera.transform.forward;
+            SetWeapon(GetWeapons()[0]);
         }
     }
 
-    // Check for collisions with AmmoCrate - Refill Ammo
-    void OnControllerColliderHit (ControllerColliderHit hit){
-        //Debug.Log(hit.gameObject.name);
-        if(hit.collider.GetComponent<AmmoCrate> () != null){
-            AmmoCrate ammoCrate = hit.gameObject.GetComponent<AmmoCrate> ();
-            ammo += ammoCrate.ammo;
-
-            // update the ammount count on the HUD
-            GameController.HUD.UpdateAmmo(ammo);
-
-            Destroy (ammoCrate.gameObject);
-        }
-    }
 
     #endregion
     #region Getters & Setters
 
     public Area Area { get { return area; } }
+
+    #endregion
+    #region Input
+
+
+    private void Update()
+    {
+        if (GameController.IsPlaying())
+        {
+            if (Input.GetMouseButtonDown(0)) // Check if Weapon is Automatic, if not don't allow holding
+            {
+                GetWeapon().Fire();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                GetWeapon().AimDownSights();
+            }
+            else if (Input.GetKey("r"))
+            {
+                GetWeapon().Reload();
+            }
+        }
+    }
+
 
     #endregion
     #region Main
@@ -81,15 +91,30 @@ public class Player : Character
             area = other.GetComponent<Area>();
             area.Enter();
         }
-        else if (other.CompareTag("TriggerDeath"))
+
+        if (other.CompareTag("TriggerDeath"))
         {
             Death();
         }
-    }
 
-    protected override void UpdateHealthbar()
-    {
+        if (other.CompareTag("AmmoCrate"))
+        {
+            AmmoCrate ammoCrate = other.GetComponent<AmmoCrate>();
 
+            if (ammoCrate != null)
+            {
+                int leftOverAmmo = GiveAmmo(ammoCrate.ammoType, ammoCrate.ammo);
+
+                if (leftOverAmmo <= 0)
+                {
+                    Destroy(ammoCrate.gameObject);
+                }
+                else
+                {
+                    ammoCrate.ammo = leftOverAmmo;
+                }
+            }
+        }
     }
 
     protected override void Death()
@@ -111,6 +136,20 @@ public class Player : Character
         }
 
         dead = false;
+    }
+
+    protected override void UpdateHealthbar()
+    {
+
+    }
+
+    public override int GiveAmmo(AmmoType ammoType, int amount)
+    {
+        int leftOverAmmo = base.GiveAmmo(ammoType, amount);
+
+        UIController.Instance.GetHUD().ChangeAmmo((int)Player.Instance.GetWeapon().GetAmmoCount());
+
+        return leftOverAmmo;
     }
 
     #endregion

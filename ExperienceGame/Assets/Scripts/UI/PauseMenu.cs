@@ -90,7 +90,7 @@ public class PauseMenu : MonoBehaviour
         dropDown.GetComponentInChildren<TMP_Text>().text = "SET RESOLUTION";
 
         // the HUD will need to be repositioned on resolution changes
-        GameController.HUD.SetHUDPosition(newWidth, newHeight);
+//        GameController.HUD.SetHUDPosition(newWidth, newHeight);
 
         // change the resolution
         Screen.SetResolution(newWidth, newHeight, Screen.fullScreen);

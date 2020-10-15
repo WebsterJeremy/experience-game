@@ -13,16 +13,6 @@ public class GameController : MonoBehaviour
 
     public enum GameState { PAUSED, PLAYING };
     public static GameState GAME_STATE = GameState.PAUSED;
-    public Player playerPublic; // used as a public gameobject for Ammo text display. Could merge with playerPrivate
-    public Enemy enemyPublic; // used as a public gameobject for Ememy Health text display.
-    public Text enemyHealth; // public element linked to UI Text cavas
-    
-    // public Text ammoText; // public element linked to UI Text cavas
-    // handle HUD elements through the HUD class instance instead
-    // Access the HUD via other scripts as so:
-    // - GameController.HUD.UpdateAmmo(ammo);
-    // - GameController.HUD.UpdateHealth(health);
-    public static HUD HUD;
 
     [Header("Player")]
     [SerializeField] private GameObject player;
@@ -57,35 +47,19 @@ public class GameController : MonoBehaviour
 
     IEnumerator Start()
     {
-        enemyHealth = GameObject.Find("text_enemy_health").GetComponentInChildren<Text>();
-
-        // initalise our HUD
-        HUD = new HUD();
-
         Input.simulateMouseWithTouches = true;
 
         yield return new WaitForFixedUpdate();
 
-        // set the position of the HUD when the screen is ready
-        HUD.SetHUDPosition(Screen.width, Screen.height);
-        
-        // ready to play
         GAME_STATE = GameState.PLAYING;
 
 //        money = GetStat("MONEY", 0);
 
-        EffectController.TweenFadeScene(1f, 0f, 2f, () => {}); // Fade in from White on start.
+        EffectController.TweenFadeScene(1f, 0f, 2f, () => {});
 
         yield return new WaitForSeconds(0.3f);
 
 //        SpawnPlayer();
-    }
-
-    void Update(){
-        // just handle this on the event of the player firing instead (in Player.cs)
-        // ammoText.text = "Ammo: " + playerPublic.Ammo;
-
-        enemyHealth.text = "Enemy Player Damage: " + enemyPublic.EnemyHealth;
     }
 
     private void OnApplicationQuit()

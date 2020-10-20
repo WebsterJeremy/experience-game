@@ -2,50 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Language", menuName = "Utility/Language")]
-public class WeaponData : ScriptableObject
-{
-    [Header("Data")]
-    [SerializeField] private float damage;
-}
-
-public class Weapon : MonoBehaviour
-{
-
-    [Header("Weapon")]
-    [SerializeField] private WeaponData weaponData;
-
-    public void Fire()
-    {
-
-    }
-
-    public void Reload()
-    {
-
-    }
-
-    public void AimDownSights()
-    {
-
-    }
-
-}
-
-public class DMGInfo
-{
-    public GameObject inflictor;
-    public float damage;
-    public float force;
-
-    public DMGInfo(GameObject inflictor, float damage, float force)
-    {
-        this.inflictor = inflictor;
-        this.damage = damage;
-        this.force = force;
-    }
-}
-
 public abstract class Character : MonoBehaviour
 {
     #region AccessVariables
@@ -54,6 +10,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private string displayName = "Character";
     [SerializeField] private float maxHealth = 100;
     [SerializeField] private Weapon weapon;
+    [SerializeField] public List<Weapon> weapons = new List<Weapon>();
+    [SerializeField] public Dictionary<AmmoType, int> ammo = new Dictionary<AmmoType, int>();
 
     [Header("Sounds")]
     [SerializeField] private SoundController.Sound[] walkSounds;
@@ -88,8 +46,26 @@ public abstract class Character : MonoBehaviour
     public float MaxHealth { get { return maxHealth; } }
     public Weapon GetWeapon() { return weapon; }
 
+    public List<Weapon> GetWeapons()
+    {
+        return weapons;
+    }
+
+    public int GetAmmo(AmmoType ammoType)
+    {
+        if (ammo == null || !ammo.ContainsKey(ammoType)) return 0; 
+
+        return ammo[ammoType];
+    }
+
+    public void SetWeapon(Weapon weapon)
+    {
+        this.weapon = weapon;
+    }
+
     #endregion
     #region Main
+
 
     public void TakeDamage(DMGInfo dmgInfo)
     {
@@ -125,6 +101,52 @@ public abstract class Character : MonoBehaviour
     }
 
     protected abstract void UpdateHealthbar();
+
+    public virtual int GiveAmmo(AmmoType ammoType, int amount)
+    {
+        if (!ammo.ContainsKey(ammoType)) {
+            ammo.Add(ammoType, amount);
+
+            return 0;
+        }
+        else
+        {
+            if (ammo[ammoType] + amount > ammoType.GetMaxCapacity())
+            {
+                int leftOverAmmo = (ammo[ammoType] + amount) - ammoType.GetMaxCapacity();
+
+                ammo[ammoType] = ammoType.GetMaxCapacity();
+
+                return leftOverAmmo;
+            }
+            else
+            {
+                ammo[ammoType] = ammo[ammoType] + amount;
+
+                return 0;
+            }
+        }
+    }
+
+    public virtual void SetAmmo(AmmoType ammoType, int amount)
+    {
+        if (!ammo.ContainsKey(ammoType))
+        {
+            ammo.Add(ammoType, amount);
+        }
+        else
+        {
+            if (amount > ammoType.GetMaxCapacity())
+            {
+                ammo[ammoType] = ammoType.GetMaxCapacity();
+
+            }
+            else
+            {
+                ammo[ammoType] = amount;
+            }
+        }
+    }
 
     #endregion
 }

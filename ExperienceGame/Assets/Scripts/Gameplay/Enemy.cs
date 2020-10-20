@@ -10,7 +10,10 @@ public enum FSMState { Idle, Move, Attack, FindCover, Dead }
 public class Enemy : Character
 {
     #region AccessVariables
-
+    // Update HUD display with current enemy health.
+    public int initialEnemyHealth = 125;
+    public int damage = 5;
+    public int EnemyHealth {get {return enemyHealth;}} // return public instance to caller
 
     [Header("Attack")]
     [SerializeField] private float moveSpeed = 7f;
@@ -25,7 +28,7 @@ public class Enemy : Character
 
     #endregion
     #region PrivateVariables
-
+    private int enemyHealth;
     protected GameObject target;
     protected Area area;
 
@@ -43,13 +46,14 @@ public class Enemy : Character
 
     #endregion
     #region Initlization
-
+    //private int enemyHealth;
 
     protected override void Start()
     {
         base.Start();
 
         target = GameObject.FindGameObjectWithTag("Player");
+        enemyHealth = initialEnemyHealth;
 
 //        StartCoroutine(FSM());
 //        StartCoroutine(CalcCoolTime());
@@ -66,13 +70,14 @@ public class Enemy : Character
     #endregion
     #region Main
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<Area>() != null)
-        {
-            area = other.GetComponent<Area>();
-        }
-    }
+// Check the purpose of this function. I have craeted another collider function for bullet detection. - BH 26/09/20
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.GetComponent<Area>() != null)
+    //     {
+    //         area = other.GetComponent<Area>();
+    //     }
+    // }
 
     protected override void UpdateHealthbar()
     {
@@ -95,7 +100,18 @@ public class Enemy : Character
         Destroy(this.gameObject, 1.3f);
     }
 
-
+        // Check for collisions
+        void OnTriggerEnter (Collider otherCollider){
+            if(otherCollider.GetComponent<Bullet>() != null){
+                Bullet bullet = otherCollider.GetComponent<Bullet>();
+                Debug.Log("Bullet Hit");
+                enemyHealth -= damage;
+                bullet.gameObject.SetActive(false);
+                if(health <= 0){
+                    Destroy(gameObject);
+                }
+            }
+        }
     #endregion
     #region AI
 

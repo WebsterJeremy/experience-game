@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     #region AccessVariables
 
     public enum GameState { PAUSED, PLAYING };
-    public static GameState GAME_STATE = GameState.PLAYING;
+    public static GameState GAME_STATE = GameState.PAUSED;
 
     [Header("Player")]
     [SerializeField] private GameObject player;
@@ -20,15 +20,12 @@ public class GameController : MonoBehaviour
     #endregion
     #region PrivateVariables
 
-
     private Texture2D screenshot;
 
     private Dictionary<string, string> stats = new Dictionary<string, string>();
 
-
     #endregion
     #region Initlization
-
 
     private static GameController instance;
     public static GameController Instance // Assign Singlton
@@ -54,9 +51,11 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForFixedUpdate();
 
+        GAME_STATE = GameState.PLAYING;
+
 //        money = GetStat("MONEY", 0);
 
-        EffectController.TweenFadeScene(1f, 0f, 2f, () => {}); // Fade in from White on start.
+        EffectController.TweenFadeScene(1f, 0f, 2f, () => {});
 
         yield return new WaitForSeconds(0.3f);
 
@@ -106,8 +105,6 @@ public class GameController : MonoBehaviour
     IEnumerator _StartGame()
     {
         yield return new WaitForSeconds(0.3f);
-
-        GAME_STATE = GameState.PLAYING;
     }
 
     #endregion
